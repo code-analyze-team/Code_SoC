@@ -1,0 +1,14 @@
+### self loop
+    code graph 中不可避免地存在self loop
+    这会对random walk造成什么影响？
+
+### loops
+
+### multi-edge
+    两点之间有多条边
+    如果不考虑就会丢失边的类型信息
+
+### node label 没有去除旧的信息
+    <init>方法要不要？
+    
+### 为啥把句子连起来？
