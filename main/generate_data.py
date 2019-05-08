@@ -129,7 +129,7 @@ def generate_nl_tokens(data_path, nl_path):
 
 
 
-def generate_embedding_map(nl_tsv, glove_path, data_path, write_path):
+def generate_embedding_map(glove_path, label_tsv, write_path):
     op = emb_ops(glove_path)
     trans = nl_transformer()
 
@@ -141,6 +141,8 @@ def generate_embedding_map(nl_tsv, glove_path, data_path, write_path):
         text = f.read().split('#')
         for label in text:
             labels.append(label)
+
+    print(len(labels))
 
     with open(write_path, 'w') as f:
         with tf.Session() as sess:
@@ -171,6 +173,11 @@ def id_test():
 dot_path = '/home/qwe/zfy_lab/project_dots/spring-master/AST_CFG_PDGdotInfo'
 data_path = '/home/qwe/zfy_data/SoC/data_new/random_walks#with_edge#union'
 nl_path = '/home/qwe/zfy_data/SoC/data_new/nl#with_edge#union'
+glove_path = '/home/qwe/zfy_data/SoC/data_new/nl_pre/glove/glove.6B.100d.txt'
+label_tsv = '/home/qwe/zfy_data/SoC/data_new/labels.tsv'
+label_mean_emb_path = '/home/qwe/zfy_data/SoC/data_new/label_mean_emb.tsv'
 # generate_random_walks(dot_path, data_path, 'with_edge')
-print('pycharm is shit')
-generate_nl_tokens(data_path, nl_path)
+# print('pycharm is shit')
+# generate_nl_tokens(data_path, nl_path)
+
+generate_embedding_map(glove_path, label_tsv, label_mean_emb_path)

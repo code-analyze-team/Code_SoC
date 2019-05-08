@@ -94,15 +94,16 @@ class preprocessor:
         move_targets = tuple(move_targets)
         res = []
         for t in tokens:
-            t = re.sub(pattern1, '', t)
-            if t.startswith(move_targets):
-                t = t[1:]
-            if t.endswith(move_targets):
-                t = t[:-1]
-            if t != None and t != '':
-                res.append(t)
+            t_ = re.sub(pattern1, '', t)
+            if t_.startswith(move_targets):
+                t_ = t_[1:]
+            if t_.endswith(move_targets):
+                t_ = t_[:-1]
+            if t_ != None and t_ != '':
+                res.append(t_)
             else:
                 print('clean exception')
+                print(t, t_)
         return res
 
     @staticmethod

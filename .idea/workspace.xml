@@ -6,7 +6,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acaf92a2-133f-499d-bcb1-c75251b26bdc" name="Default Changelist" comment="Merge branch 'master' of https://github.com/code-analyze-team/cg2vec&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml">
-      <change beforePath="$PROJECT_DIR$/build_data/embedding_ops.py" beforeDir="false" afterPath="$PROJECT_DIR$/build_data/embedding_ops.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build_data/preprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/build_data/preprocess.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main/generate_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/generate_data.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,11 +17,35 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main/generate_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="137" column="32" lean-forward="true" selection-start-line="137" selection-start-column="32" selection-end-line="137" selection-end-column="32" />
+            <state relative-caret-position="-510">
+              <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build_data/nl_transform.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="24" column="36" selection-start-line="24" selection-start-column="36" selection-end-line="24" selection-end-column="36" />
+              <folding>
+                <element signature="e#126#135#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/build_data/preprocess.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="465">
+              <caret line="105" column="28" lean-forward="true" selection-start-line="105" selection-start-column="28" selection-end-line="105" selection-end-column="28" />
+              <folding>
+                <element signature="e#199#210#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -29,8 +53,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build_data/embedding_ops.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="32" selection-start-line="32" selection-end-line="32" />
+            <state relative-caret-position="675">
+              <caret line="45" column="18" lean-forward="true" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="18" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -41,8 +65,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/test_embedding/test_emb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="9" lean-forward="true" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
+            <state relative-caret-position="30">
+              <caret line="2" column="79" lean-forward="true" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="79" />
             </state>
           </provider>
         </entry>
@@ -122,11 +146,11 @@
         <option value="$PROJECT_DIR$/main/label2nl2embedding.py" />
         <option value="$PROJECT_DIR$/main/generate_random_walk_data_edge#one.py" />
         <option value="$PROJECT_DIR$/build_data/nl_transform.py" />
-        <option value="$PROJECT_DIR$/build_data/preprocess.py" />
         <option value="$PROJECT_DIR$/test/preprocess_test/test_tokenize.py" />
         <option value="$PROJECT_DIR$/build_data/embedding_ops.py" />
         <option value="$PROJECT_DIR$/test/test_embedding/test_emb.py" />
         <option value="$PROJECT_DIR$/main/generate_data.py" />
+        <option value="$PROJECT_DIR$/build_data/preprocess.py" />
       </list>
     </option>
   </component>
@@ -145,7 +169,22 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="ProjectPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="SoC" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SoC" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SoC" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SoC" type="462c0819:PsiDirectoryNode" />
+              <item name="build_data" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -176,7 +215,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test_emb">
+  <component name="RunManager" selected="Python.generate_data">
     <configuration name="generate_data" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="cg2vec" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -284,10 +323,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test_emb" />
-        <item itemvalue="Python.test_tokenize" />
         <item itemvalue="Python.generate_data" />
         <item itemvalue="Python.preprocess" />
+        <item itemvalue="Python.test_emb" />
+        <item itemvalue="Python.test_tokenize" />
         <item itemvalue="Python.generate_random_walk_data_edge#one" />
       </list>
     </recent_temporary>
@@ -413,13 +452,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2157291" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2157291" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49972692" weight="0.3294979" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49590388" visible="true" weight="0.33263597" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49590388" visible="true" weight="0.33263597" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49808848" weight="0.39748955" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -726,32 +766,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build_data/nl_transform.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="24" column="35" lean-forward="true" selection-start-line="24" selection-start-column="35" selection-end-line="24" selection-end-column="35" />
-          <folding>
-            <element signature="e#126#135#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/preprocess_test/test_tokenize.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="11" column="10" lean-forward="true" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="10" />
           <folding>
             <element signature="e#0#46#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build_data/preprocess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1605">
-          <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
-          <folding>
-            <element signature="e#199#210#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -765,8 +785,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/build_data/embedding_ops.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
+        <state relative-caret-position="675">
+          <caret line="45" column="18" lean-forward="true" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="18" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
@@ -775,15 +795,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/test_embedding/test_emb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="9" lean-forward="true" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
+        <state relative-caret-position="30">
+          <caret line="2" column="79" lean-forward="true" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build_data/nl_transform.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="36" selection-start-line="24" selection-start-column="36" selection-end-line="24" selection-end-column="36" />
+          <folding>
+            <element signature="e#126#135#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main/generate_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="137" column="32" lean-forward="true" selection-start-line="137" selection-start-column="32" selection-end-line="137" selection-end-column="32" />
+        <state relative-caret-position="-510">
+          <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build_data/preprocess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="105" column="28" lean-forward="true" selection-start-line="105" selection-start-column="28" selection-end-line="105" selection-end-column="28" />
+          <folding>
+            <element signature="e#199#210#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
