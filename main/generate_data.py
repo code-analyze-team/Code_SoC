@@ -127,37 +127,28 @@ def generate_nl_tokens(data_path, nl_path):
     return None
 
 
-def generate_embedding_map(nl_tsv, embeddings_tsv, label_path, write_path):
-    op = emb_ops(embeddings_tsv)
+
+
+def generate_embedding_map(nl_tsv, glove_path, data_path, write_path):
+    op = emb_ops(glove_path)
     trans = nl_transformer()
 
-    '''get nl and corresponding id in metadata.tsv'''
-    nl_id_map = {}
-    with open(nl_tsv, 'r') as f:
-        count = 0
-        for line in f.readlines():
-            label = line.strip('\n')
-            id_ = count
-            nl_id_map.setdefault(label, '')
-            nl_id_map[label] = id_
-            count += 1
 
-    '''get label set'''
+
+    '''get label set from meta_label.tsv'''
     labels = []
-    with open(label_path, 'r') as f:
+    with open(data_path, 'r') as f:
         text = f.read().split('#')
         for label in text:
             labels.append(label)
-    label_set = set(labels)
 
     with open(write_path, 'w') as f:
         with tf.Session() as sess:
             i = 0
-            for label in label_set:
+            for label in labels:
                 print(i)
                 tokens = trans.label2tokens(label)
-                tokens_id = [nl_id_map.get(t) for t in tokens]
-                embs = op.lookup_1d(tokens_id)
+                embs = op.lookup_glove_embedding_batch(tokens)
                 mean = tf.reduce_mean(embs, axis=0)
                 mean_value = sess.run(mean)
                 for v in mean_value:
