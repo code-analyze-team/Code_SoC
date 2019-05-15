@@ -8,19 +8,10 @@ graph version: use int number (0, 1, 2 ...) as node id, different node id may co
 """
 
 import logging
-import sys
-from io import open
-from os import path
-from time import time
-from glob import glob
-from six.moves import range, zip, zip_longest
-from six import iterkeys
-from collections import defaultdict, Iterable
 import random
-from random import shuffle
-from itertools import product,permutations
-from scipy.io import loadmat
-from scipy.sparse import issparse
+import networkx as nx
+import matplotlib.pyplot as plt
+from build_data.preprocess import preprocessor
 
 
 logger = logging.getLogger('cg2vec')
@@ -170,7 +161,7 @@ class Graph:
 
     def in_edges(self, node):
         """return all out edges of a node"""
-        return self.graph.in_edges(node)
+        return list(self.graph.in_edges(node))
 
 
     def out_edges_multi(self, node):
@@ -188,8 +179,19 @@ class Graph:
 
 
     def in_edges_multi(self, node):
-        # TODO
-        return None
+        """return all in edges in 3-tuple form"""
+        in_edges_3_form = []
+        in_edges = self.in_edges(node)
+        for edge in in_edges:
+            s = edge[0]
+            t = edge[1]
+            multi = self.graph[s][t]
+            for i in range(len(multi)):
+                # print('i: ' + str(i))
+                # print(s, t)
+                label = self.graph[s][t][i]['label']
+                in_edges_3_form.append((s, t, label))
+        return in_edges_3_form
 
     def find_tail_node(self, head, edge):
         """
@@ -201,6 +203,19 @@ class Graph:
         s = edge[0]
         t = edge[1]
         return t
+
+    def draw(self):
+        plt.subplot(221)
+        nx.draw(self.graph, with_labels=True, font_weight='bold')
+        plt.show()
+
+    @staticmethod
+    def draw_save(graph, path):
+        plt.subplot(211)
+        nx.draw(graph, with_labels=True, font_weight='bold')
+        # plt.show()
+        plt.savefig(path)
+
 
 
     def random_walk_adjacent(self, path_length, alpha=0, rand=random.Random(), start=None):
@@ -304,3 +319,115 @@ class Graph:
             res.append(edge_path[i][2])
         res.append(self.get_label(path[len(path)-1]))
         return res
+
+    def reduce_graph_by_line_num(self):
+        """
+        1. given a line number, find all corresponding nodes : node_set
+        2. find all edges link with node in node_set : edges_set = in_set + out_set
+        3. remove inner edges : inner_set
+        4. add a new node : new_node = label1 + label2 + ...
+        5. attach remaining edges with new_node : remain_set = edges_set - inner_set
+        6. delete inner nodes : inner_set
+        7. relabel
+        :return: relabelled graph
+        """
+
+        map = {}
+        reversed_map = {}
+        for node in self.graph.nodes():
+            name = node
+            line_num = self.get_lineNum(node)
+
+            map.setdefault(name, [])
+            map[name].append(line_num)
+            reversed_map.setdefault(line_num, [])
+            reversed_map[line_num].append(name)
+        assert len(map.keys()) == len(self.graph.nodes())
+        print(reversed_map)
+
+        for num in reversed_map.keys():
+            if int(num) != -1:
+                # step1 : node_set
+                node_set = reversed_map.get(num)
+
+                # step2 : edges_set
+                in_set = []
+                out_set = []
+                for node in node_set:
+                    for e in self.out_edges_multi(node):
+                        out_set.append(e)
+                    for e in self.in_edges_multi(node):
+                        in_set.append(e)
+                edges_set = in_set + out_set
+                edges_set = sorted(set(edges_set), key=edges_set.index)
+
+                # step3 : edges_set = edges_set - inner_set
+                inner_edges = []
+                inner_nodes = reversed_map.get(num)
+                # print(num +': ' + ' '.join(inner_nodes))
+                for e in edges_set:
+                    if e[0] in inner_nodes and e[1] in inner_nodes:
+                        edges_set.remove(e)
+                        inner_edges.append(e)
+
+                # step4 : add a new graph
+                new_node = inner_nodes[0] + '_'
+                new_label = ''
+                for node in inner_nodes:
+                    l = self.get_label(node)
+                    l = preprocessor.clean_word(l)
+                    new_label += l + '\t'
+                new_label = new_label.strip('\t')
+                new_linenum = num
+                self.graph.add_node(new_node, label=new_label, lineNum=new_linenum)
+
+                # step5 : add new edges
+                for e in edges_set:
+                    self.graph.remove_edge(e[0], e[1])
+                    if e in in_set:
+                        source = e[0]
+                        target = new_node
+                        label = e[2]
+                        self.graph.add_edge(source, target, label=label)
+
+                    if e in out_set:
+                        source = new_node
+                        target = e[1]
+                        label = e[2]
+                        self.graph.add_edge(source, target, label=label)
+
+                # step6 : remove inner nodes and edges
+                self.graph.remove_nodes_from(inner_nodes)
+                # for e in inner_edges:
+                #     self.graph.remove_edge(e[0], e[1], e[2])
+
+        return self.graph
+
+
+
+
+        # '''relabel the graph'''
+        # node_count_map = {}
+        # count_label_map = {}
+        # count = 0
+        # for node in self.graph.nodes():
+        #     label = self.get_label(node)
+        #     node_count_map.setdefault(node, '')
+        #     node_count_map[node] = str(count)
+        #     count_label_map.setdefault(str(count), '')
+        #     count_label_map[str(count)] = label
+        #     count +=1
+        # relabelled_graph = nx.relabel_nodes(self.graph, node_count_map)
+        # for node in relabelled_graph.nodes():
+        #     label = count_label_map.get(node)
+        #     relabelled_graph.nodes[node]['label'] = label
+        #
+        # relabelled_graph = Graph(relabelled_graph)
+        # # for node in relabelled_graph.nodes():
+        # #     print(node, relabelled_graph.get_label(node))
+        #
+        # return relabelled_graph
+
+
+
+

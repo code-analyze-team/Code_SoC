@@ -15,6 +15,7 @@ from networkx.drawing.nx_pydot import write_dot,read_dot
 import pydot
 import re
 from build_data.preprocess import preprocessor
+from graphs.graph import Graph
 
 
 logger = logging.getLogger('cg2vec')
@@ -26,8 +27,8 @@ LOGFORMAT = "%(asctime).19s %(levelname)s %(filename)s: %(lineno)s %(message)s"
 class dot_parser:
     """parse dots , get graphs from the dots, and relabel them"""
 
-    def __init__(self, path):
-        self.path = path
+    def __init__(self, paths):
+        self.path = paths.split('#')
         self.cfg_maps = []
         self.cfg_dot_files = []
         self.third_party_maps = []
@@ -36,7 +37,7 @@ class dot_parser:
         self.dot_md_map = {}
         self.relabelled_graph_list = []
         self.relabelled_graph_list_partial = []
-        self.labels = []
+        self.reduced_graphs = []
 
     def read_dot_files(self):
         """
@@ -46,11 +47,8 @@ class dot_parser:
         """
         cfg_maps = []
         cfg_dot_files = []
-        third_party_dot_files = []
-        third_party_maps = []
-        path = self.path
-        for root, dirs, files in os.walk(path):
-            if str(root) != path + 'thirdPartyMethodsDotFiles':
+        for path in self.path:
+            for root, dirs, files in os.walk(path):
                 for file in files:
                     if file == 'cfg_map.txt':
                         fullname = os.path.join(root, file)
@@ -59,20 +57,10 @@ class dot_parser:
                     if file.endswith('CFG.dot'):
                         fullname = os.path.join(root, file)
                         cfg_dot_files.append(fullname)
-            else:
-                for file in files:
-                    if file == 'cfg_map.txt':
-                        fullname = os.path.join(root, file)
-                        parent = root
-                        third_party_maps.append((fullname, parent))
-                    if file.endswith('CFG.dot'):
-                        fullname = os.path.join(root, file)
-                        third_party_dot_files.append(fullname)
+
 
         self.cfg_maps = cfg_maps
         self.cfg_dot_files = cfg_dot_files
-        self.third_party_maps = third_party_maps
-        self.third_party_dot_files = third_party_dot_files
 
     def map_method_dot(self):
         """
@@ -236,25 +224,35 @@ class dot_parser:
         # print(errcount)
         self.relabelled_graph_list_partial = g_list
 
-    def get_all_labels_jimple(self):
-        """
-        since not all labels are in jimple representation
-        this method gather all the label in jimple form from all the dot files
-        to elimate repetive jimples, we return them in a set
-        :return: a set of all jimple representations
-        """
-        """
-        note that all the move that requires a full satck of jimples shuold use this method
-        and preprocess shuold be done
-        """
-        jimples = []
+    def get_reduced_graphs(self):
+        reduced_graphs = []
         for g in self.relabelled_graph_list:
-            for node in g.nodes():
-                label = str(g.nodes[node]['label'])
-                label = preprocessor.clean_label(label)
-                if label.find('Stmt') != -1:
-                    jimples.append(label)
-        jimple_set = set(jimples)
-        self.jimples = jimples
-        self.jimple_set = jimple_set
-        return jimple_set
+            graph = Graph(g)
+            g_ = graph.reduce_graph_by_line_num()
+            reduced_graphs.append(g_)
+
+        self.reduced_graphs = reduced_graphs
+        return reduced_graphs
+
+    # def get_all_labels_jimple(self):
+    #     """
+    #     since not all labels are in jimple representation
+    #     this method gather all the label in jimple form from all the dot files
+    #     to elimate repetive jimples, we return them in a set
+    #     :return: a set of all jimple representations
+    #     """
+    #     """
+    #     note that all the move that requires a full satck of jimples shuold use this method
+    #     and preprocess shuold be done
+    #     """
+    #     jimples = []
+    #     for g in self.relabelled_graph_list:
+    #         for node in g.nodes():
+    #             label = str(g.nodes[node]['label'])
+    #             label = preprocessor.clean_word(label)
+    #             if label.find('Stmt') != -1:
+    #                 jimples.append(label)
+    #     jimple_set = set(jimples)
+    #     self.jimples = jimples
+    #     self.jimple_set = jimple_set
+    #     return jimple_set

@@ -13,20 +13,25 @@ class nl_transformer:
 
     def label2tokens(self, label):
         # preprocess
-        label = preprocessor.clean_label(label)
-        nl = self.determine_and_solve(label)
-        nl = nl.strip('\n')
-        nl = nl.strip('\"')
-        nl = nl.strip('\'')
-        tokens = preprocessor.tokenize(nl)
-        tokens = preprocessor.remove_stop_words(tokens)
-        tokens = preprocessor.lemmatize(tokens)
-        tokens = preprocessor.stemm(tokens)
-        tokens = preprocessor.clean_nl_tokens(tokens)
-        return tokens
+        all = label.split('\t')
+        res = []
+        for l in all:
+            if l != '' and l != ' ' and l != None:
+                nl = self.determine_and_solve(l)
+                nl = nl.strip('\n')
+                nl = nl.strip('\"')
+                nl = nl.strip('\'')
+                tokens = preprocessor.tokenize(nl)
+                tokens = preprocessor.remove_stop_words(tokens)
+                tokens = preprocessor.lemmatize(tokens)
+                tokens = preprocessor.stemm(tokens)
+                tokens = preprocessor.clean_nl_tokens(tokens)
+                res.extend(tokens)
+        print('label: ' + label + '   tokens: ' + ' '.join(res))
+        return res
 
     def determine_and_solve(self, label):
-        self.label = preprocessor.clean_label(label)
+        self.label = label
         if label.find('JAssignStmt') != -1:
             nl = self.solve_assign()
         elif label.find('IdentityStmt') != -1:

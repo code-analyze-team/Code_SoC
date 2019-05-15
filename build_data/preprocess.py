@@ -47,7 +47,7 @@ class preprocessor:
         camel_splited = []
         for tu in underlines:
             for t in tu.split('_'):
-                if t != None and t != '':
+                if t != '':
                     camel_splited.append(t)
 
         '''
@@ -94,16 +94,16 @@ class preprocessor:
         move_targets = tuple(move_targets)
         res = []
         for t in tokens:
+            assert t != ''
+            assert t != ' '
+            assert t != None
             t_ = re.sub(pattern1, '', t)
             if t_.startswith(move_targets):
                 t_ = t_[1:]
             if t_.endswith(move_targets):
                 t_ = t_[:-1]
-            if t_ != None and t_ != '':
+            if t_ != '':
                 res.append(t_)
-            else:
-                print('clean exception')
-                print(t, t_)
         return res
 
     @staticmethod
@@ -143,11 +143,12 @@ class preprocessor:
             return None
 
     @staticmethod
-    def clean_label(jimple):
-        res = jimple.strip('\n')
-        res = res.strip('\"')
-        res = res.strip('\'')
-        return res
+    def clean_word(word):
+        word = word.strip('\n')
+        word = word.strip('\"')
+        word = word.strip('\'')
+        word = word.strip(' ')
+        return word
 
     @staticmethod
     def if_in_glove(target):
