@@ -52,7 +52,7 @@ def generate_random_walks(dot_path, data_path, walk_mode, graph_mode='normal'):
     with open(data_path, 'w') as file:
         for walk in random_walks:
             for word in walk:
-                word = preprocessor.clean_word(word)
+                word = preprocessor.clean_label(word)
                 assert word != ''
                 file.writelines(word + '#')
                 labels.append(word)
@@ -131,7 +131,23 @@ def generate_nl_tokens(data_path, nl_path):
                     f2.write(t + ' ')
     return None
 
-
+def build_dataset(words): #words, vocabulary_size
+    """Process raw inputs into a dataset."""
+    count = [['UNK', -1]]
+    count.extend(collections.Counter(words).most_common())
+    dictionary = {}
+    for word, _ in count:
+        dictionary[word] = len(dictionary)
+    data = []
+    unk_count = 0
+    for word in words:
+        index = dictionary.get(word, 0)
+        if index == 0:  # dictionary['UNK']
+            unk_count += 1
+        data.append(index)
+    count[0][1] = unk_count
+    reversed_dictionary = dict(zip(dictionary.values(), dictionary.keys()))
+    return data, count, dictionary, reversed_dictionary
 
 
 def generate_embedding_map(glove_path, label_tsv, write_path):
@@ -143,14 +159,18 @@ def generate_embedding_map(glove_path, label_tsv, write_path):
     with open(data_path, 'r') as f:
         text = f.read().split('#')
         for label in text:
-            labels.append(label)
+            label = preprocessor.clean_label(label)
+            if label != '' and label != ' ':
+                labels.append(label)
 
     print(len(labels))
 
-    l2 = sorted(set(labels), key=labels.index)
+    # l2 = sorted(set(labels), key=labels.index)
+    data, count, dic, rev_dic = build_dataset(labels)
+    print(len(dic))
     f = open(label_tsv, 'w')
     count = 0
-    for label in l2:
+    for label, index in dic.items():
         f.write(label + '\t' + str(count))
         f.write('\n')
         count += 1
@@ -158,7 +178,7 @@ def generate_embedding_map(glove_path, label_tsv, write_path):
     with open(write_path, 'w') as f:
         with tf.Session() as sess:
             i = 0
-            for label in l2:
+            for label, _ in dic.items():
                 print(i)
                 tokens = trans.label2tokens(label)
                 embs = op.lookup_glove_embedding_batch(tokens)
@@ -189,12 +209,12 @@ path4 = '/home/qwe/projects/46.Spring batch/AST_CFG_PDGdotInfo/'
 path = path1 + '#' + path2 + '#' + path3 + '#' + path4
 
 data_path = '/home/qwe/zfy_data/SoC/data_new/random_walks/reduced_graphs/union_data.txt'
-nl_path = '/home/qwe/zfy_data/SoC/data_new/nl#with_edge#union'
-glove_path = '/home/qwe/zfy_data/SoC/data_new/nl_pre/glove/glove.6B.100d.txt'
-label_tsv = '/home/qwe/zfy_data/SoC/data_new/labels.tsv'
-label_mean_emb_path = '/home/qwe/zfy_data/SoC/data_new/label_mean_emb.tsv'
-generate_random_walks(path, data_path, 'with_edge', graph_mode='reduced')
+# nl_path = '/home/qwe/zfy_data/SoC/data_new/nl#with_edge#union'
+glove_path = '/home/qwe/zfy_data/SoC/data_new/nl_tokens/glove/glove.6B.200d.txt'
+label_tsv = '/home/qwe/zfy_data/SoC/data_new/nl_tokens/labels.tsv'
+label_mean_emb_path = '/home/qwe/zfy_data/SoC/data_new/label_embeddings/reduced_graphs/label_emb.tsv'
+# generate_random_walks(path, data_path, 'with_edge', graph_mode='reduced')
 # print('pycharm is shit')
 # generate_nl_tokens(data_path, nl_path)
 
-# generate_embedding_map(glove_path, label_tsv, label_mean_emb_path)
+generate_embedding_map(glove_path, label_tsv, label_mean_emb_path)

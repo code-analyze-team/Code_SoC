@@ -17,6 +17,7 @@ class nl_transformer:
         res = []
         for l in all:
             if l != '' and l != ' ' and l != None:
+                print(l)
                 nl = self.determine_and_solve(l)
                 nl = nl.strip('\n')
                 nl = nl.strip('\"')
@@ -28,6 +29,7 @@ class nl_transformer:
                 tokens = preprocessor.clean_nl_tokens(tokens)
                 res.extend(tokens)
         print('label: ' + label + '   tokens: ' + ' '.join(res))
+        print('----------------------------------------------')
         return res
 
     def determine_and_solve(self, label):
@@ -212,7 +214,7 @@ def solve_static_invoke(input):
     md_name = res.group(4)
     param_types = res.group(5).split(',')
     param_feeds = res.group(6).split(',')
-    assert len(param_types) == len(param_feeds)
+    # assert len(param_types) == len(param_feeds)
     nl = 'the method' + ' invokes an static method from class ' + belong + '. The method has name as ' + md_name + ', has parameter types as '
     for param_type in param_types:
         nl += param_type + ', '

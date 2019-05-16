@@ -375,7 +375,7 @@ class Graph:
                 new_label = ''
                 for node in inner_nodes:
                     l = self.get_label(node)
-                    l = preprocessor.clean_word(l)
+                    l = preprocessor.clean_label(l)
                     new_label += l + '\t'
                 new_label = new_label.strip('\t')
                 new_linenum = num

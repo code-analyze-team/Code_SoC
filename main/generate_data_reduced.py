@@ -38,7 +38,7 @@ def generate_random_walks_reduced(dot_path, data_path, walk_mode):
     with open(data_path, 'w') as file:
         for walk in random_walks:
             for word in walk:
-                word = preprocessor.clean_word(word)
+                word = preprocessor.clean_label(word)
                 assert word != ''
                 # print(word)
                 file.write(word + '#')

@@ -27,7 +27,7 @@ class emb_ops:
             word = split_line[0]
             emb = np.array([float(val) for val in split_line[1:]])
             emb = emb.reshape((1, -1))
-            print(emb.shape)
+            # print(emb.shape)
             map.setdefault(word, '')
             map[word] = emb
         self.glove = map
@@ -39,7 +39,7 @@ class emb_ops:
         if target in self.glove.keys():
             emb = self.glove.get(target)
         else:
-            unk_mat = np.random.rand(1, 100)
+            unk_mat = np.random.rand(1, 200)
             unk_mat = (unk_mat - 0.5) / 10  # so that value is in [-0.5, 0.5]
             emb = unk_mat
         assert emb.shape[0] > 0 and emb.shape[1] > 0
@@ -49,6 +49,7 @@ class emb_ops:
         emb = self.lookup_glove_embedding_single(tokens[0])
         for i in range(1, len(tokens)):
             tmp = self.lookup_glove_embedding_single(tokens[i])
+            print('tmp: ', tmp.shape)
             emb = np.concatenate((emb, tmp), axis=0)
         assert emb.shape[0] == len(tokens)
         return emb

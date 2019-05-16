@@ -143,7 +143,7 @@ class preprocessor:
             return None
 
     @staticmethod
-    def clean_word(word):
+    def clean_label(word):
         word = word.strip('\n')
         word = word.strip('\"')
         word = word.strip('\'')
